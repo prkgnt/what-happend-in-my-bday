@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Calendar from "react-calendar";
+
+import "../assets/Calendar.css";
 
 const Container = styled.div`
   display: block;
@@ -79,7 +82,46 @@ const FooterText = styled.div`
   font-size: 12px;
 `;
 
+const DateInputModal = styled.div`
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const DateBox = styled.div`
+  background-color: white;
+  position: relative;
+  width: 90%;
+  height: 500px;
+  border-radius: 20px;
+  display: flex;
+  //justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px 10px;
+`;
+const DateText = styled.div`
+  font-family: "Gmarket";
+  margin-top: 5px;
+`;
+const DateBtn = styled(Btn)`
+  transform: translate(0%);
+`;
+
 const Root = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [dateValue, onChange] = useState(new Date());
+
+  useEffect(() => {
+    console.log(dateValue);
+  }, [dateValue]);
+
   return (
     <Container>
       <Header>
@@ -138,7 +180,7 @@ const Root = () => {
             <Content style={{ color: "white", fontSize: "18px" }}>
               무슨 일이 있었는지 알아봐요!
             </Content>
-            <Btn>
+            <Btn onClick={() => setIsOpen((prev) => !prev)}>
               <BtnText>생일 입력하기</BtnText>
             </Btn>
           </ContentWrap>
@@ -150,6 +192,30 @@ const Root = () => {
           <FooterText>문의사항: pgt258258@gmail.com</FooterText>
         </FooterBox>
       </Footer>
+      {isOpen && (
+        <DateInputModal>
+          <DateBox>
+            <Calendar onChange={onChange} value={dateValue} />
+            <br></br>
+            <DateText>당신의 생일인</DateText>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <DateText style={{ color: "#663333" }}>
+                {dateValue.toLocaleDateString()}
+              </DateText>
+              <DateText>에는</DateText>
+            </div>
+            <DateText>무슨 일이 있었을까요?</DateText>
+            <DateBtn>
+              <BtnText>알아보러 가기</BtnText>
+            </DateBtn>
+          </DateBox>
+        </DateInputModal>
+      )}
     </Container>
   );
 };
