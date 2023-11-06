@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Calendar from "react-calendar";
+import { useNavigate } from "react-router-dom";
 
 import "../assets/Calendar.css";
+import Loader from "../\bcomponents/Loader";
 
 const Container = styled.div`
   display: block;
@@ -116,11 +118,13 @@ const DateBtn = styled(Btn)`
 
 const Root = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [dateValue, onChange] = useState(new Date());
-
-  useEffect(() => {
-    console.log(dateValue);
-  }, [dateValue]);
+  const nav = useNavigate();
+  const isFinished = () => {
+    setIsLoading(false);
+    nav("/results");
+  };
 
   return (
     <Container>
@@ -194,7 +198,7 @@ const Root = () => {
       </Footer>
       {isOpen && (
         <DateInputModal>
-          <DateBox>
+          <DateBox disable={true}>
             <Calendar onChange={onChange} value={dateValue} />
             <br></br>
             <DateText>당신의 생일인</DateText>
@@ -210,10 +214,19 @@ const Root = () => {
               <DateText>에는</DateText>
             </div>
             <DateText>무슨 일이 있었을까요?</DateText>
-            <DateBtn>
+            <DateBtn
+              onClick={() => {
+                setIsLoading(true);
+              }}
+            >
               <BtnText>알아보러 가기</BtnText>
             </DateBtn>
           </DateBox>
+          {isLoading && (
+            <DateInputModal>
+              <Loader isFinished={isFinished} />
+            </DateInputModal>
+          )}
         </DateInputModal>
       )}
     </Container>
