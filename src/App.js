@@ -1,7 +1,7 @@
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import Root from "./Root";
-import Results from "./Results";
+import Root from "./screen/Root";
+import Results from "./screen/Results";
 
 function App() {
   return (
