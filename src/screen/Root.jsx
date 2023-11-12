@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
@@ -119,12 +119,31 @@ const DateBtn = styled(Btn)`
 const Root = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [realLoading, setRealLoading] = useState(true);
   const [dateValue, onChange] = useState(new Date());
+  const [data, setData] = useState(null);
   const nav = useNavigate();
   const isFinished = () => {
     setIsLoading(false);
-    nav("/results");
   };
+  const getData = async () => {
+    const bDayText =
+      dateValue.getMonth() + 1 + "월%20" + dateValue.getDate() + "일";
+    console.log(bDayText);
+    const url = `https://ko.wikipedia.org/w/api.php?action=query&prop=extracts&titles=${bDayText}&format=json&formatversion=2`;
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.query.pages[0].extract);
+        setData(data.query.pages[0].extract);
+        setRealLoading(false);
+      });
+  };
+  useEffect(() => {
+    if (!isLoading & !realLoading) {
+      nav("/results", { state: { bData: data } });
+    }
+  }, [isLoading, realLoading]);
 
   return (
     <Container>
@@ -217,6 +236,8 @@ const Root = () => {
             <DateBtn
               onClick={() => {
                 setIsLoading(true);
+                setRealLoading(true);
+                getData();
               }}
             >
               <BtnText>알아보러 가기</BtnText>
