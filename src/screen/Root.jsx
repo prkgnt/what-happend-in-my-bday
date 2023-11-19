@@ -115,6 +115,12 @@ const DateText = styled.div`
 const DateBtn = styled(Btn)`
   transform: translate(0%);
 `;
+const InputName = styled.input`
+  width: 50%;
+  height: 15px;
+  margin-right: 5px;
+  text-align: center;
+`;
 
 const Root = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -122,6 +128,7 @@ const Root = () => {
   const [realLoading, setRealLoading] = useState(true);
   const [dateValue, onChange] = useState(new Date());
   const [data, setData] = useState(null);
+  const [name, setName] = useState(null);
   const nav = useNavigate();
   const isFinished = () => {
     setIsLoading(false);
@@ -220,7 +227,24 @@ const Root = () => {
           <DateBox disable={true}>
             <Calendar onChange={onChange} value={dateValue} />
             <br></br>
-            <DateText>당신의 생일인</DateText>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <InputName
+                placeholder="이름을 입력해주세요!"
+                type="text"
+                value={name}
+                onChange={(event) => {
+                  setName(event.target.value);
+                }}
+              />
+              <DateText>님의 생일인</DateText>
+            </div>
             <div
               style={{
                 display: "flex",
