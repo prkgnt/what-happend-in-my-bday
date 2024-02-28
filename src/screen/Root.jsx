@@ -121,6 +121,19 @@ const InputName = styled.input`
   margin-right: 5px;
   text-align: center;
 `;
+const CloseBtn = styled.button`
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid gray;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`;
 
 const Root = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -138,13 +151,13 @@ const Root = () => {
       dateValue.getMonth() + 1 + "월%20" + dateValue.getDate() + "일";
     console.log(bDayText);
     const url = `https://ko.wikipedia.org/w/api.php?action=query&prop=extracts&titles=${bDayText}&format=json&formatversion=2`;
-    await fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.query.pages[0].extract);
-        setData(data.query.pages[0].extract);
-        setRealLoading(false);
-      });
+    // await fetch(url)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data.query.pages[0].extract);
+    //     setData(data.query.pages[0].extract);
+    //     setRealLoading(false);
+    //   });
   };
   useEffect(() => {
     if (!isLoading & !realLoading) {
@@ -225,6 +238,9 @@ const Root = () => {
       {isOpen && (
         <DateInputModal>
           <DateBox disable={true}>
+            <CloseBtn onClick={() => setIsOpen(false)}>
+              <BtnText style={{ color: "black" }}>X</BtnText>
+            </CloseBtn>
             <Calendar onChange={onChange} value={dateValue} />
             <br></br>
             <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const LoaderText = styled.div`
@@ -9,17 +9,19 @@ const LoaderText = styled.div`
 
 const Loader = ({ isFinished }) => {
   const [dots, setDots] = useState("");
+  const interval = useRef(null);
+  const timer = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    interval.current = setInterval(() => {
       setDots((prevDots) => (prevDots.length >= 3 ? "" : prevDots + "."));
     }, 500);
-
-    const timer = setTimeout(() => {
-      clearInterval(interval);
-      clearTimeout(timer);
+    timer.current = setTimeout(() => {
+      clearInterval(interval.current);
+      clearTimeout(timer.current);
       isFinished();
     }, 4000);
+    return () => {};
   }, []);
 
   return <LoaderText>검색 중{dots}</LoaderText>;
